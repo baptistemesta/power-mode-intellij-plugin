@@ -39,4 +39,17 @@ public class Particle {
 
         g2d.dispose();
     }
+
+    @Override
+    public String toString() {
+        return "Particle{" +
+                "x=" + x +
+                ", y=" + y +
+                ", dx=" + dx +
+                ", dy=" + dy +
+                ", size=" + size +
+                ", life=" + life +
+                ", c=" + c +
+                '}';
+    }
 }

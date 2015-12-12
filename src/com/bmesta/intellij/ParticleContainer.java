@@ -23,6 +23,7 @@ public class ParticleContainer extends Canvas {
         setSize(100, 100);
         bufferstrat = getBufferStrategy();
         setVisible(true);
+        setIgnoreRepaint(true);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -56,15 +57,17 @@ public class ParticleContainer extends Canvas {
     public void addParticle(boolean bool, int x, int y) {
         int dx, dy;
         if (bool) {
-            dx = (int) (Math.random() * 5);
-            dy = (int) (Math.random() * 5);
+            dx = (int) (Math.random() * 3);
+            dy = (int) (Math.random() * 3);
         } else {
-            dx = (int) (Math.random() * -5);
-            dy = (int) (Math.random() * -5);
+            dx = (int) (Math.random() * -3);
+            dy = (int) (Math.random() * -3);
         }
-        int size = (int) (Math.random() * 12);
+        int size = (int) (Math.random() * 5);
         int life = (int) (Math.random() * (120)) + 380;
-        particles.add(new Particle(x, y, dx, dy, size, life, JBColor.green));
+        final Particle e = new Particle(x, y, dx, dy, size, life, JBColor.green);
+        particles.add(e);
+        System.out.println("created particle "+e);
     }
 
     public void renderParticles(Graphics2D g2d) {
@@ -77,26 +80,25 @@ public class ParticleContainer extends Canvas {
         do {
             do {
                 Graphics2D g2d = (Graphics2D) bufferstrat.getDrawGraphics();
-                g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
-
+                g2d.fillRect(0, 0, getWidth(), getHeight());
                 renderParticles(g2d);
-
                 g2d.dispose();
-                this.repaint();
             } while (bufferstrat.contentsRestored());
             bufferstrat.show();
         } while (bufferstrat.contentsLost());
     }
 
     public void update(Point point) {
-        this.setBounds(point.x, point.y, getWidth(), getHeight());
+        final int midX = getWidth() / 2;
+        final int midY = getHeight() / 2;
+        this.setBounds(point.x - midX, point.y - midY, getWidth(), getHeight());
         System.out.println("set the canvas to " + point);
-        addParticle(true, point.x, point.y);
-        addParticle(false, point.x, point.y);
-        addParticle(true, point.x, point.y);
-        addParticle(false, point.x, point.y);
-        addParticle(true, point.x, point.y);
-        addParticle(false, point.x, point.y);
+        addParticle(true, midX, midY);
+        addParticle(false, midX, midY);
+        addParticle(true, midX, midY);
+        addParticle(false, midX, midY);
+        addParticle(true, midX, midY);
+        addParticle(false, midX, midY);
         render();
         this.repaint();
     }
