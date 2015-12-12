@@ -27,7 +27,7 @@
 
     <application-components>
         <component>
-            <implementation-class>com.bmesta.intellij.PowerMode2</implementation-class>
+            <implementation-class>com.bmesta.intellij.PowerMode</implementation-class>
         </component>
     </application-components>
 
