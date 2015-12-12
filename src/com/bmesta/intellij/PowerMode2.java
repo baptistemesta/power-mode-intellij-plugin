@@ -25,6 +25,7 @@ public class PowerMode2 implements ApplicationComponent {
     private ArrayList<Particle> particles = new ArrayList<Particle>(500);
     private BufferStrategy bufferstrat;
     private Editor currentEditor;
+    private MyJComponent myJComponent;
 
     @Override
     public void initComponent() {
@@ -51,7 +52,8 @@ public class PowerMode2 implements ApplicationComponent {
     private void updateCanvas(@NotNull Editor editor) {
         currentEditor = editor;
         Point point = currentEditor.visualPositionToXY(editor.getCaretModel().getVisualPosition());
-
+        render.setBounds(point.x,point.y,render.getWidth(),render.getHeight());
+        System.out.println("set the canvas to "+point);
         addParticle(true, point.x, point.y);
         addParticle(false, point.x, point.y);
         addParticle(true, point.x, point.y);
@@ -99,10 +101,15 @@ public class PowerMode2 implements ApplicationComponent {
 
     private void initCanvas(@NotNull Editor editor) {
         if (render == null) {
+            myJComponent = new MyJComponent();
+            myJComponent.setSize(100,100);
+            myJComponent.setVisible(true);
             render = new Canvas();
             JComponent parent = editor.getContentComponent();
             parent.add(render);
+            parent.add(myJComponent);
             render.createBufferStrategy(2);
+            render.setSize(100,100);
             bufferstrat = render.getBufferStrategy();
             render.setBackground(JBColor.BLUE);
             render.setVisible(true);
@@ -131,9 +138,6 @@ public class PowerMode2 implements ApplicationComponent {
         ApplicationManager.getApplication().runReadAction(new Runnable() {
             @Override
             public void run() {
-                System.out.printf("read editor");
-                Point point = currentEditor.visualPositionToXY(currentEditor.getCaretModel().getVisualPosition());
-                render.setLocation(point.x - 50, point.y - 50);
                 for (int i = 0; i <= particles.size() - 1; i++) {
                     if (particles.get(i).update())
                         particles.remove(i);
