@@ -14,9 +14,11 @@ public class ParticleContainer extends JComponent {
 
 
     public static final int SIZE = 100;
+    private final JComponent parent;
+    private boolean dir;
 
     public ParticleContainer(Editor editor) {
-        JComponent parent = editor.getContentComponent();
+        parent = editor.getContentComponent();
         parent.add(this);
         setVisible(true);
         new Thread(new Runnable() {
@@ -34,7 +36,13 @@ public class ParticleContainer extends JComponent {
                 }
             }
 
+
         }).start();
+    }
+
+    private void shakeEditor(JComponent parent, int dx, int dy, boolean dir) {
+        final Rectangle bounds = parent.getBounds();
+        parent.setBounds(bounds.x + (dir ? -dx : dx), bounds.y + (dir ? -dy : dy), bounds.width, bounds.height);
     }
 
     @Override
@@ -87,6 +95,8 @@ public class ParticleContainer extends JComponent {
         addParticle(false, midX, midY);
         addParticle(true, midX, midY);
         addParticle(false, midX, midY);
+        shakeEditor(parent, 10, 10, dir);
+        dir = !dir;
         this.repaint();
     }
 }
