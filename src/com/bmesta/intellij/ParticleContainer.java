@@ -1,6 +1,8 @@
 package com.bmesta.intellij;
 
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -13,14 +15,37 @@ import com.intellij.ui.JBColor;
 public class ParticleContainer extends JComponent {
 
 
-    public static final int SIZE = 100;
     private final JComponent parent;
     private boolean dir;
 
     public ParticleContainer(Editor editor) {
         parent = editor.getContentComponent();
         parent.add(this);
+        this.setBounds(parent.getBounds());
+        this.setBorder(BorderFactory.createLineBorder(JBColor.RED));
         setVisible(true);
+        parent.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                ParticleContainer.this.setBounds(parent.getBounds());
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                System.out.println("shown");
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                System.out.println("hidden");
+            }
+        });
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -64,11 +89,11 @@ public class ParticleContainer extends JComponent {
 
     public void addParticle(int x, int y) {
         int dx, dy;
-        dx = (int) (Math.random() * 3 + 1) * (Math.random()>0.5?-1:1) ;
-        dy = (int) (Math.random() * -3 + 1);
+        dx = (int) (Math.random() * 4 ) * (Math.random()>0.5?-1:1) ;
+        dy = (int) (Math.random() * -3 - 1);
 
-        int size = (int) (Math.random() * 4);
-        int life = (int) (Math.random() * (120)) + 380;
+        int size = (int) (Math.random() * 3 +1);
+        int life = 15;
         final Particle e = new Particle(x, y, dx, dy, size, life, JBColor.darkGray);
         particles.add(e);
     }
@@ -81,15 +106,16 @@ public class ParticleContainer extends JComponent {
 
 
     public void update(Point point) {
-        final int midX = SIZE / 2;
-        final int midY = SIZE / 2;
-        this.setBounds(point.x - midX, point.y - midY, SIZE, SIZE);
-        addParticle(midX, midY);
-        addParticle(midX, midY);
-        addParticle(midX, midY);
-        addParticle(midX, midY);
-        addParticle(midX, midY);
-        addParticle(midX, midY);
+        //final int midX = SIZE / 2;
+        //final int midY = SIZE / 2;
+        //this.setBounds(point.x - midX, point.y - midY, SIZE, SIZE);
+        addParticle(point.x, point.y);
+        addParticle(point.x, point.y);
+        addParticle(point.x, point.y);
+        addParticle(point.x, point.y);
+        addParticle(point.x, point.y);
+        addParticle(point.x, point.y);
+        addParticle(point.x, point.y);
         shakeEditor(parent, 5, 5, dir);
         dir = !dir;
         this.repaint();
