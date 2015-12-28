@@ -52,7 +52,6 @@ public class ParticleContainer extends JComponent {
     }
 
     private void updateParticles() {
-
         for (int i = 0; i <= particles.size() - 1; i++) {
             if (particles.get(i).update())
                 particles.remove(i);
@@ -63,18 +62,14 @@ public class ParticleContainer extends JComponent {
 
     private ArrayList<Particle> particles = new ArrayList<Particle>(500);
 
-    public void addParticle(boolean bool, int x, int y) {
+    public void addParticle(int x, int y) {
         int dx, dy;
-        if (bool) {
-            dx = (int) (Math.random() * 3);
-            dy = (int) (Math.random() * 3);
-        } else {
-            dx = (int) (Math.random() * -3);
-            dy = (int) (Math.random() * -3);
-        }
-        int size = (int) (Math.random() * 5);
+        dx = (int) (Math.random() * 3 + 1) * (Math.random()>0.5?-1:1) ;
+        dy = (int) (Math.random() * -3 + 1);
+
+        int size = (int) (Math.random() * 4);
         int life = (int) (Math.random() * (120)) + 380;
-        final Particle e = new Particle(x, y, dx, dy, size, life, JBColor.green);
+        final Particle e = new Particle(x, y, dx, dy, size, life, JBColor.darkGray);
         particles.add(e);
     }
 
@@ -89,13 +84,13 @@ public class ParticleContainer extends JComponent {
         final int midX = SIZE / 2;
         final int midY = SIZE / 2;
         this.setBounds(point.x - midX, point.y - midY, SIZE, SIZE);
-        addParticle(true, midX, midY);
-        addParticle(false, midX, midY);
-        addParticle(true, midX, midY);
-        addParticle(false, midX, midY);
-        addParticle(true, midX, midY);
-        addParticle(false, midX, midY);
-        shakeEditor(parent, 10, 10, dir);
+        addParticle(midX, midY);
+        addParticle(midX, midY);
+        addParticle(midX, midY);
+        addParticle(midX, midY);
+        addParticle(midX, midY);
+        addParticle(midX, midY);
+        shakeEditor(parent, 5, 5, dir);
         dir = !dir;
         this.repaint();
     }
