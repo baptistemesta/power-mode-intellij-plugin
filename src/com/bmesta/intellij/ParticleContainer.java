@@ -22,7 +22,6 @@ public class ParticleContainer extends JComponent {
         parent = editor.getContentComponent();
         parent.add(this);
         this.setBounds(parent.getBounds());
-        this.setBorder(BorderFactory.createLineBorder(JBColor.RED));
         setVisible(true);
         parent.addComponentListener(new ComponentListener() {
             @Override
@@ -106,9 +105,6 @@ public class ParticleContainer extends JComponent {
 
 
     public void update(Point point) {
-        //final int midX = SIZE / 2;
-        //final int midY = SIZE / 2;
-        //this.setBounds(point.x - midX, point.y - midY, SIZE, SIZE);
         addParticle(point.x, point.y);
         addParticle(point.x, point.y);
         addParticle(point.x, point.y);

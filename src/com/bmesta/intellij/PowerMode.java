@@ -1,11 +1,10 @@
 package com.bmesta.intellij;
 
-import java.awt.*;
-import javax.swing.*;
-
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.actionSystem.EditorActionManager;
 import com.intellij.openapi.editor.actionSystem.TypedAction;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
@@ -16,40 +15,33 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PowerMode implements ApplicationComponent {
 
-    private ParticleContainer particleContainer;
+    private ParticleContainerManager particleContainerManager;
 
     @Override
     public void initComponent() {
 
-        final TypedAction typedAction = EditorActionManager.getInstance().getTypedAction();
+        final EditorActionManager editorActionManager = EditorActionManager.getInstance();
+        final EditorFactory editorFactory = EditorFactory.getInstance();
+        particleContainerManager = new ParticleContainerManager();
+        editorFactory.addEditorFactoryListener(particleContainerManager, new Disposable() {
+            @Override
+            public void dispose() {
+
+            }
+        });
+        final TypedAction typedAction = editorActionManager.getTypedAction();
         final TypedActionHandler rawHandler = typedAction.getRawHandler();
         typedAction.setupRawHandler(new TypedActionHandler() {
             @Override
             public void execute(@NotNull final Editor editor, final char c, @NotNull final DataContext dataContext) {
-
-                // Run key handler outside of the key typed command for creating our own undoable commands
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        initCanvas(editor);
-                        updateCanvas(editor);
-                    }
-                });
+                updateEditor(editor);
                 rawHandler.execute(editor, c, dataContext);
             }
         });
     }
 
-    private void updateCanvas(@NotNull Editor editor) {
-        Point point = editor.visualPositionToXY(editor.getCaretModel().getVisualPosition());
-        particleContainer.update(point);
-    }
-
-
-    private void initCanvas(@NotNull Editor editor) {
-        if (particleContainer == null) {
-            particleContainer = new ParticleContainer(editor);
-        }
+    private void updateEditor(@NotNull final Editor editor) {
+        particleContainerManager.update(editor);
     }
 
 
