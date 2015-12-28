@@ -41,6 +41,7 @@ public class PowerMode implements ApplicationComponent {
     }
 
     private void updateEditor(@NotNull final Editor editor) {
+        //TODO configurable
         particleContainerManager.update(editor);
     }
 

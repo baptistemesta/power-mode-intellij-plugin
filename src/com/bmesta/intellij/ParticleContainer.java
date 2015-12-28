@@ -12,7 +12,7 @@ import com.intellij.ui.JBColor;
 /**
  * @author Baptiste Mesta
  */
-public class ParticleContainer extends JComponent {
+public class ParticleContainer extends JComponent implements ComponentListener {
 
 
     private final JComponent parent;
@@ -23,28 +23,7 @@ public class ParticleContainer extends JComponent {
         parent.add(this);
         this.setBounds(parent.getBounds());
         setVisible(true);
-        parent.addComponentListener(new ComponentListener() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                ParticleContainer.this.setBounds(parent.getBounds());
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-                System.out.println("shown");
-
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-                System.out.println("hidden");
-            }
-        });
+        parent.addComponentListener(this);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -87,11 +66,12 @@ public class ParticleContainer extends JComponent {
     private ArrayList<Particle> particles = new ArrayList<Particle>(500);
 
     public void addParticle(int x, int y) {
+        //TODO configurable
         int dx, dy;
-        dx = (int) (Math.random() * 4 ) * (Math.random()>0.5?-1:1) ;
+        dx = (int) (Math.random() * 4) * (Math.random() > 0.5 ? -1 : 1);
         dy = (int) (Math.random() * -3 - 1);
 
-        int size = (int) (Math.random() * 3 +1);
+        int size = (int) (Math.random() * 3 + 1);
         int life = 15;
         final Particle e = new Particle(x, y, dx, dy, size, life, JBColor.darkGray);
         particles.add(e);
@@ -105,6 +85,7 @@ public class ParticleContainer extends JComponent {
 
 
     public void update(Point point) {
+        //TODO configurable
         addParticle(point.x, point.y);
         addParticle(point.x, point.y);
         addParticle(point.x, point.y);
@@ -115,5 +96,25 @@ public class ParticleContainer extends JComponent {
         shakeEditor(parent, 5, 5, dir);
         dir = !dir;
         this.repaint();
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        ParticleContainer.this.setBounds(parent.getBounds());
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+
     }
 }
