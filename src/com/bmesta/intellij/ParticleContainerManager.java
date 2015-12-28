@@ -16,6 +16,26 @@ import org.jetbrains.annotations.NotNull;
 class ParticleContainerManager extends EditorFactoryAdapter {
     private Map<Editor, ParticleContainer> particleContainers = new HashMap<Editor, ParticleContainer>();
 
+    public ParticleContainerManager() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    for (ParticleContainer particleContainer : particleContainers.values()) {
+                        particleContainer.updateParticles();
+                    }
+                    try {
+                        Thread.sleep(1000 / 60);
+                    } catch (InterruptedException ignored) {
+                        //thread interrupted, shutdown
+                    }
+                }
+            }
+
+
+        }).start();
+    }
+
     @Override
     public void editorCreated(@NotNull EditorFactoryEvent event) {
         final Editor editor = event.getEditor();

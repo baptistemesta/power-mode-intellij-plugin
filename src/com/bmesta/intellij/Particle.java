@@ -32,12 +32,12 @@ public class Particle {
     }
 
     public void render(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g.create();
-
-        g2d.setColor(c);
-        g2d.fillRect(x - (size / 2), y - (size / 2), size, size);
-
-        g2d.dispose();
+        if (life > 0) {
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setColor(c);
+            g2d.fillRect(x - (size / 2), y - (size / 2), size, size);
+            g2d.dispose();
+        }
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.*;
 
 import com.intellij.openapi.editor.Editor;
@@ -16,7 +17,8 @@ public class ParticleContainer extends JComponent implements ComponentListener {
 
 
     private final JComponent parent;
-    private boolean dir;
+    private boolean shakeDir;
+    private ArrayList<Particle> particles = new ArrayList<Particle>(50);
 
     public ParticleContainer(Editor editor) {
         parent = editor.getContentComponent();
@@ -24,23 +26,6 @@ public class ParticleContainer extends JComponent implements ComponentListener {
         this.setBounds(parent.getBounds());
         setVisible(true);
         parent.addComponentListener(this);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-
-                    updateParticles();
-
-                    try {
-                        Thread.sleep(1000 / 60);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-
-        }).start();
     }
 
     private void shakeEditor(JComponent parent, int dx, int dy, boolean dir) {
@@ -54,16 +39,20 @@ public class ParticleContainer extends JComponent implements ComponentListener {
         renderParticles(g);
     }
 
-    private void updateParticles() {
-        for (int i = 0; i <= particles.size() - 1; i++) {
-            if (particles.get(i).update())
-                particles.remove(i);
+    public void updateParticles() {
+        if (!particles.isEmpty()) {
+            ArrayList<Particle> tempParticles = new ArrayList<Particle>(particles);
+            final Iterator<Particle> particleIterator = tempParticles.iterator();
+            while (particleIterator.hasNext()) {
+                if (particleIterator.next().update()) {
+                    particleIterator.remove();
+                }
+            }
+            particles = tempParticles;
+            this.repaint();
         }
-        this.repaint();
 
     }
-
-    private ArrayList<Particle> particles = new ArrayList<Particle>(500);
 
     public void addParticle(int x, int y) {
         //TODO configurable
@@ -77,24 +66,20 @@ public class ParticleContainer extends JComponent implements ComponentListener {
         particles.add(e);
     }
 
-    public void renderParticles(Graphics g2d) {
-        for (int i = 0; i <= particles.size() - 1; i++) {
-            particles.get(i).render(g2d);
+    public void renderParticles(Graphics g) {
+        for (Particle particle : particles) {
+            particle.render(g);
         }
     }
 
 
     public void update(Point point) {
         //TODO configurable
-        addParticle(point.x, point.y);
-        addParticle(point.x, point.y);
-        addParticle(point.x, point.y);
-        addParticle(point.x, point.y);
-        addParticle(point.x, point.y);
-        addParticle(point.x, point.y);
-        addParticle(point.x, point.y);
-        shakeEditor(parent, 5, 5, dir);
-        dir = !dir;
+        for (int i = 0; i < 7; i++) {
+            addParticle(point.x, point.y);
+        }
+        shakeEditor(parent, 5, 5, shakeDir);
+        shakeDir = !shakeDir;
         this.repaint();
     }
 
