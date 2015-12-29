@@ -1,4 +1,4 @@
-package com.bmesta.intellij;
+package com.bmesta.powermode;
 
 import java.awt.*;
 

@@ -1,4 +1,4 @@
-package com.bmesta.intellij;
+package com.bmesta.powermode;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -14,10 +14,11 @@ import org.jetbrains.annotations.NotNull;
  * @author Baptiste Mesta
  */
 class ParticleContainerManager extends EditorFactoryAdapter {
+    private Thread thread;
     private Map<Editor, ParticleContainer> particleContainers = new HashMap<Editor, ParticleContainer>();
 
     public ParticleContainerManager() {
-        new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
@@ -33,7 +34,8 @@ class ParticleContainerManager extends EditorFactoryAdapter {
             }
 
 
-        }).start();
+        });
+        thread.start();
     }
 
     @Override
@@ -48,12 +50,13 @@ class ParticleContainerManager extends EditorFactoryAdapter {
     }
 
     public void update(final Editor editor) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                updateInUI(editor);
-            }
-        });
+        if (PowerMode.getInstance().isEnabled())
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    updateInUI(editor);
+                }
+            });
     }
 
     private void updateInUI(Editor editor) {
@@ -62,5 +65,10 @@ class ParticleContainerManager extends EditorFactoryAdapter {
         if (particleContainer != null) {
             particleContainer.update(point);
         }
+    }
+
+    public void dispose() {
+        thread.interrupt();
+        particleContainers.clear();
     }
 }

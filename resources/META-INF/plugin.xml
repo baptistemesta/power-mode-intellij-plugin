@@ -1,39 +1,26 @@
 <idea-plugin version="2">
-    <id>com.your.company.unique.plugin.id</id>
-    <name>Plugin display name here</name>
-    <version>1.0</version>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <id>com.bmesta.powermode</id>
+    <name>Power mode</name>
+    <version>0.9</version>
+    <vendor email="baptiste.mesta@gmail.com" url="https://github.com/baptistemesta/power-mode-intellij-plugin">Baptiste Mesta</vendor>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      Based on the activate-power-mode atom plugin.<br>
     ]]></description>
 
-    <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
-    ]]>
-    </change-notes>
-
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="141.0" />
-
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
-
 
     <application-components>
         <component>
-            <implementation-class>com.bmesta.intellij.PowerMode</implementation-class>
+            <implementation-class>com.bmesta.powermode.PowerMode</implementation-class>
         </component>
     </application-components>
 
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable groupId="appearance" groupWeight="20" id="power.mode" displayName="Power mode" instance="com.bmesta.powermode.PowerModeConfigurable"/>
+    </extensions>
 
     <actions>
-        <!-- Add your actions here -->
     </actions>
 
 </idea-plugin>

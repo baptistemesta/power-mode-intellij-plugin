@@ -1,4 +1,4 @@
-package com.bmesta.intellij;
+package com.bmesta.powermode;
 
 import java.awt.*;
 import java.awt.event.ComponentEvent;
