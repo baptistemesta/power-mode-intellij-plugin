@@ -43,14 +43,11 @@ import org.jetbrains.annotations.Nullable;
 )
 public class PowerMode implements ApplicationComponent, PersistentStateComponent<PowerMode> {
 
-    public static final String SEPARATOR = "_";
-    public static final String ENABLED = "ENABLED";
-    public static final String PLUGIN_ID = "com.bmesta.powermode";
 
     @com.intellij.util.xmlb.annotations.Transient
     private ParticleContainerManager particleContainerManager;
 
-    private boolean enabled;
+    private boolean enabled = true;
 
     public static PowerMode getInstance() {
         return ApplicationManager.getApplication().getComponent(PowerMode.class);

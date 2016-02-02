@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.*;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.ui.JBColor;
 
@@ -40,6 +41,7 @@ public class ParticleContainer extends JComponent implements ComponentListener {
         parent = editor.getContentComponent();
         parent.add(this);
         this.setBounds(parent.getBounds());
+        this.setBorder(BorderFactory.createLineBorder(JBColor.red));
         setVisible(true);
         parent.addComponentListener(this);
     }
@@ -102,10 +104,15 @@ public class ParticleContainer extends JComponent implements ComponentListener {
     @Override
     public void componentResized(ComponentEvent e) {
         ParticleContainer.this.setBounds(parent.getBounds());
+
+        Logger.getInstance(this.getClass()).info("Resized");
+
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
+        ParticleContainer.this.setBounds(parent.getBounds());
+        Logger.getInstance(this.getClass()).info("Moved");
 
     }
 

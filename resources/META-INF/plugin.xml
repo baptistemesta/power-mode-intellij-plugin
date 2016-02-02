@@ -6,6 +6,8 @@
 
     <description><![CDATA[
       Based on the activate-power-mode atom plugin.<br>
+      <h1>How to use</h1><br>
+Install the plugin then simply enable the sparkling in Preferences > Appearance > Power mode
     ]]></description>
 
     <idea-version since-build="141.0" />
