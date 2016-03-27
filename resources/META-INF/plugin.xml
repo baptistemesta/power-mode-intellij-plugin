@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.bmesta.powermode</id>
     <name>Power mode</name>
-    <version>0.9</version>
+    <version>0.9.1</version>
     <vendor email="baptiste.mesta@gmail.com" url="https://github.com/baptistemesta/power-mode-intellij-plugin">Baptiste Mesta</vendor>
 
     <description><![CDATA[
@@ -9,6 +9,12 @@
       <h1>How to use</h1><br>
 Install the plugin then simply enable the sparkling in Preferences > Appearance > Power mode
     ]]></description>
+
+    <change-notes><![CDATA[
+       <p>0.9.1  Fix scrolling issue</p>
+       <p>0.9    First version.</p>
+    ]]></change-notes>
+
 
     <idea-version since-build="141.0" />
 
@@ -19,7 +25,7 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
     </application-components>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable groupId="appearance" groupWeight="20" id="power.mode" displayName="Power mode" instance="com.bmesta.powermode.PowerModeConfigurable"/>
+        <applicationConfigurable groupId="appearance" groupWeight="20" id="power.mode" displayName="Power mode" instance="com.bmesta.powermode.PowerModeConfigurable" />
     </extensions>
 
     <actions>
