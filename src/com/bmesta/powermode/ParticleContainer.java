@@ -40,7 +40,6 @@ public class ParticleContainer extends JComponent implements ComponentListener {
         parent = this.editor.getContentComponent();
         parent.add(this);
         updateBounds();
-        this.setBorder(BorderFactory.createLineBorder(JBColor.red));
         setVisible(true);
         parent.addComponentListener(this);
     }
