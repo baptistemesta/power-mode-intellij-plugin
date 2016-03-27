@@ -1,12 +1,9 @@
 /*
  * Copyright 2015 Baptiste Mesta
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
  * http://www.apache.org/licenses/LICENSE-2.0
- *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +18,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import javax.swing.*;
 
 import com.intellij.openapi.diagnostic.Logger;
@@ -32,15 +30,16 @@ import com.intellij.ui.JBColor;
  */
 public class ParticleContainer extends JComponent implements ComponentListener {
 
-
     private final JComponent parent;
+    private final Editor editor;
     private boolean shakeDir;
-    private ArrayList<Particle> particles = new ArrayList<Particle>(50);
+    private ArrayList<Particle> particles = new ArrayList<>(50);
 
     public ParticleContainer(Editor editor) {
-        parent = editor.getContentComponent();
+        this.editor = editor;
+        parent = this.editor.getContentComponent();
         parent.add(this);
-        this.setBounds(parent.getBounds());
+        updateBounds();
         this.setBorder(BorderFactory.createLineBorder(JBColor.red));
         setVisible(true);
         parent.addComponentListener(this);
@@ -59,7 +58,7 @@ public class ParticleContainer extends JComponent implements ComponentListener {
 
     public void updateParticles() {
         if (!particles.isEmpty()) {
-            ArrayList<Particle> tempParticles = new ArrayList<Particle>(particles);
+            ArrayList<Particle> tempParticles = new ArrayList<>(particles);
             final Iterator<Particle> particleIterator = tempParticles.iterator();
             while (particleIterator.hasNext()) {
                 if (particleIterator.next().update()) {
@@ -90,7 +89,6 @@ public class ParticleContainer extends JComponent implements ComponentListener {
         }
     }
 
-
     public void update(Point point) {
         //TODO configurable
         for (int i = 0; i < 7; i++) {
@@ -103,15 +101,19 @@ public class ParticleContainer extends JComponent implements ComponentListener {
 
     @Override
     public void componentResized(ComponentEvent e) {
-        ParticleContainer.this.setBounds(parent.getBounds());
+        updateBounds();
 
         Logger.getInstance(this.getClass()).info("Resized");
 
     }
 
+    private void updateBounds() {
+        ParticleContainer.this.setBounds(editor.getScrollingModel().getVisibleArea().getBounds());
+    }
+
     @Override
     public void componentMoved(ComponentEvent e) {
-        ParticleContainer.this.setBounds(parent.getBounds());
+        updateBounds();
         Logger.getInstance(this.getClass()).info("Moved");
 
     }
